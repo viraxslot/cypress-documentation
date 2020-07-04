@@ -24,13 +24,14 @@ Option | Type | Description
 `configFile` | *string / boolean* | Path to the config file to be used. If `false` is passed, no config file will be used.
 `env` | *object* | Specify {% url "environment variables" environment-variables %}
 `group` | *string* | {% url "Group" parallelization#Grouping-test-runs %} recorded tests together under a single run
-`headed` | *boolean* | Displays the browser instead of running headlessly (defaults to true for Chrome-family browsers)
-`headless` | *boolean* | Hide the browser instead of running headed (defaults to true for Electron)
+`headed` | *boolean* | Displays the browser instead of running headlessly (default Firefox and Chromium-based browsers)
+`headless` | *boolean* | Hide the browser instead of running headed (defaults for Electron)
 `key` | *string* | Specify your secret record key
 `exit` | *boolean* | Whether to close Cypress after all tests run
 `parallel` | *boolean* | Run recorded specs in {% url "parallel" parallelization %} across multiple machines
 `port` | *number* | Override default port
 `project` | *string* | Path to a specific project
+`quiet`| *boolean* | If passed, Cypress output will not be printed to `stdout`. Only output from the configured {% url "Mocha reporter" reporters %} will print.
 `record` | *boolean* | Whether to record the test run
 `reporter` | *string* | Specify a {% url "Mocha reporter" reporters %}
 `reporterOptions` | *object* | Specify {% url "Mocha reporter" reporters %} options
@@ -45,7 +46,6 @@ cypress.run({
   browser: 'chrome',
   config: {
     baseUrl: 'http://localhost:8080',
-    chromeWebSecurity: false,
     video: true,
   },
   env: {
@@ -137,3 +137,7 @@ const cypress = require('cypress')
 
 cypress.open()
 ```
+
+{% history %}
+{% url "4.9.0" changelog %} | Added `quiet` option to `cypress.run()`
+{% endhistory %}

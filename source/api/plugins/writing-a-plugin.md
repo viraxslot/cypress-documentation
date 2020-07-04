@@ -63,6 +63,13 @@ Some plugins may utilize or require these values, so they can take certain actio
 
 You can programmatically modify these values and Cypress will then respect these changes. This enables you to swap out configuration based on things like the environment you're running in.
 
+{% note warning %}
+The `config` object also includes the following extra values that are not part of the standard configuration. **These values are read only and cannot be modified from the plugins file.**
+
+* `configFile`: The absolute path to the config file. By default, this is `<projectRoot>/cypress.json`, but may be a custom path or `false` if using the {% url "`--config-file` flag" command-line#cypress-open-config-file-lt-config-file-gt %}.
+* `projectRoot`: The absolute path to the root of the project (e.g. `/Users/me/dev/my-project`)
+{% endnote %}
+
 {% url "Please check out our API docs for modifying configuration here." configuration-api %}
 
 ## List of events
@@ -75,12 +82,6 @@ Event | Description
 {% url `before:browser:launch` browser-launch-api %} | Occurs immediately before launching a browser.
 {% url `task` task %} | Occurs in conjunction with the `cy.task` command.
 {% url `after:screenshot` after-screenshot-api %} | Occurs after a screenshot is taken.
-
-{% note warning "More Coming Soon" %}
-The Plugins API is relatively new.
-
-We have many new plugin events {% issue 684 'we are adding' %}.
-{% endnote %}
 
 # Execution context
 

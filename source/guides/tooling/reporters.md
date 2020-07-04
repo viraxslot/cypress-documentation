@@ -19,8 +19,6 @@ Once you've read through the documentation below, we invite you to experience th
 
 # Custom reporter
 
-You need to install any peer dependencies the reporter requires, even if they're bundled with Cypress. For example, {% url "mochawesome" https://github.com/adamgruber/mochawesome %} requires `mocha` as a peer dependency. You will need to install `mocha` as a dev dependency of your own project for it to work.
-
 ## Installed locally
 
 Custom reporters can be loaded through a relative or absolute path. These can be specified in your configuration file (`cypress.json` by default) or via the {% url "command line" command-line %}.
@@ -117,7 +115,7 @@ The following configuration will create separate XML files in the `results` fold
 
 ```shell
 cypress run --reporter junit \
-  --reporter-options "results/my-test-output-[hash].xml"
+  --reporter-options "mochaFile=results/my-test-output-[hash].xml"
 ```
 
 # Multiple reporters
@@ -138,10 +136,10 @@ The below examples were implemented in {% url https://github.com/cypress-io/cypr
 
 We want to output a "spec" report to `STDOUT`, while saving Mochawesome JSON reports and then combine them into a single report.
 
-We need to install additional dependencies including Mocha itself.
+We need to install additional dependencies.
 
 ```shell
-npm install --save-dev mocha cypress-multi-reporters mocha-junit-reporter
+npm install --save-dev cypress-multi-reporters mocha-junit-reporter
 ```
 
 Specify your reporter and reporterOptions in your configuration file (`cypress.json` by default) or via the {% url "command line" command-line %}.
@@ -164,12 +162,12 @@ cypress run --reporter cypress-multi-reporters \
   --reporter-options configFile=reporter-config.json
 ```
 
-Then add the separate `reporter-config.json` file (defined in your configuration) to enable `spec` and `junit` reporters and direct the `junit` reporter to save a separate XML files.
+Then add the separate `reporter-config.json` file (defined in your configuration) to enable `spec` and `junit` reporters and direct the `junit` reporter to save separate XML files.
 
 ```json
 {
   "reporterEnabled": "spec, mocha-junit-reporter",
-  "reporterOptions": {
+  "mochaJunitReporterReporterOptions": {
     "mochaFile": "cypress/results/results-[hash].xml"
   }
 }
@@ -191,10 +189,10 @@ We recommend deleting all files from the `cypress/results` folder before running
 
 This example is shown in the branch `spec-and-single-mochawesome-json` in {% url https://github.com/cypress-io/cypress-example-circleci-orb %}. We want to output a "spec" report to `STDOUT`, save an individual Mochawesome JSON file per test file, and then combine all JSON reports into a single report.
 
-We need to install several dependencies.
+We need to install some additional dependencies.
 
 ```shell
-npm install --save-dev mocha mochawesome mochawesome-merge mochawesome-report-generator
+npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
 ```
 
 We need to configure the reporter in your {% url "configuration file (`cypress.json` by default)" configuration %} to skip the HTML report generation and save each individual JSON file in the `cypress/results` folder.
@@ -223,13 +221,13 @@ cypress run --reporter mochawesome \
 Our run will generate files `cypress/results/mochawesome.json, cypress/results/mochawesome_001.json, ...`. Then we can combine them using the {% url 'mochawesome-merge' https://github.com/antontelesh/mochawesome-merge %} utility.
 
 ```shell
-npx mochawesome-merge --reportDir cypress/results > mochawesome.json
+npx mochawesome-merge "cypress/results/*.json" > mochawesome.json
 ```
 
 We can now generate a combined HTML report from the `mochawesome.json` file using the {% url https://github.com/adamgruber/mochawesome-report-generator %}:
 
 ```shell
-npx mochawesome-report-generator mochawesome.json
+npx marge mochawesome.json
 ```
 
 It generates the beautiful standalone HTML report file `mochawesome-report/mochawesome.html` shown below. As you can see all test results, timing information, and even test bodies are included.
@@ -237,3 +235,7 @@ It generates the beautiful standalone HTML report file `mochawesome-report/mocha
 {% imgTag /img/guides/mochawesome-report.png "Mochawesome HTML report" %}
 
 For more information, see {% url 'Integrating Mochawesome reporter with Cypress's http://antontelesh.github.io/testing/2019/02/04/mochawesome-merge.html %}
+
+{% history %}
+{% url "4.4.2" changelog %} | Custom Mocha reporters updated to use the version of Mocha bundled with Cypress. No need to install `mocha` separately to use custom reporters.
+{% endhistory %}

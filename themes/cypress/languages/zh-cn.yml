@@ -34,13 +34,14 @@ sidebar:
     writing-and-organizing-tests: 编写和组织测试
     conditional-testing: 条件测试
     test-runner: 测试执行器
-    dashboard: Dashboard
-    dashboard-introduction: Introduction
+    dashboard: 数据面板
+    dashboard-introduction: 简介
     projects: 项目
     runs: 录制的运行
     organizations: 组织
     users: 成员
-    github-integration: GitHub Integration
+    github-integration: GitHub集成
+    slack-integration: Slack集成
     analytics: 分析工具
     debugging: 调试
     variables-and-aliases: 变量和别名
@@ -53,9 +54,11 @@ sidebar:
     parallelization: 并行化
     environment-variables: 环境变量
     launching-browsers: 启动浏览器
+    cross-browser-testing: 跨浏览器测试
     custom-commands: 自定义命令
     web-security: Web安全
     references: 参考
+    experiments: 实验性
     configuration: 配置
     proxy-configuration: 代理配置
     error-messages: 错误消息
@@ -63,17 +66,19 @@ sidebar:
     assertions: 断言
     best-practices: 最佳实践
     trade-offs: 取舍
+    troubleshooting: 故障排查
     changelog: 更新日志
+    migration-guide: 迁移指南
     roadmap: 路线图
     tooling: 工具
-    intelligent-code-completion: 代码智能补全
+    IDE-integration: IDE集成
     plugins-guide: 插件
     reporters: 报告生成器
     typescript-support: TypeScript
     module-api: API模块
     retry-ability: 重试机制
-    visual-testing: Visual Testing
-    code-coverage: Code Coverage
+    visual-testing: 可视化测试
+    code-coverage: 代码覆盖率
   api:
     api: API
     table-of-contents: Table of Contents
@@ -174,9 +179,11 @@ sidebar:
     moment: moment
     blob: Blob
     promise: Promise
+    sinon: sinon
     cypress-api: Cypress API
     config: config
     env: env
+    isbrowser: isBrowser
     iscy: isCy
     custom-commands: Commands
     cookies: Cookies

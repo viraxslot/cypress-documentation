@@ -13,6 +13,9 @@ title: Network Requests
 - How to write declarative tests that resist flake
 {% endnote %}
 
+{% note info %}
+**Note:** If you're looking for a resource to make an HTTP request take a look at {% url "`cy.request()`" request %}
+{% endnote %}
 # Testing Strategies
 
 Cypress helps you test the entire lifecycle of Ajax / XHR requests within your application. Cypress provides you direct access to the XHR objects, enabling you to make assertions about its properties. Additionally you can even stub and mock a request's response.
@@ -34,7 +37,7 @@ Within Cypress, you have the ability to choose whether to stub responses or allo
 
 Let's investigate both strategies, why you would use one versus the other, and why you should regularly use both.
 
-## Don't Stub Responses
+## Use Server Responses
 
 Requests that are not stubbed actually reach your server. By *not* stubbing your responses, you are writing true *end-to-end* tests. This means you are driving your application the same way a real user would.
 
@@ -50,7 +53,7 @@ In other words, you can have confidence your server is sending the correct data 
 If you are writing a traditional server-side application where most of the responses are HTML you will likely have few stubbed responses. However, most modern applications that serve JSON can take advantage of stubbing.
 
 {% note success Benefits %}
-- Guaranteed to work in production
+- More likely to work in production
 - Test coverage around server endpoints
 - Great for traditional server-side HTML rendering
 {% endnote %}
@@ -115,7 +118,7 @@ Cypress automatically indicates when an XHR request happens in your application.
 
 {% imgTag /img/guides/network-requests/snapshot-of-request-command.gif "Snapshot of request and response" %}
 
-By default, Cypress is configured to *ignore* requests that are used to fetch static content like `.js` or `.html` files. This keeps the Command Log less noisy. This option can be changed by overriding the default whitelisting in the {% url '`cy.server()` options' server#Options %}.
+By default, Cypress is configured to *ignore* requests that are used to fetch static content like `.js` or `.html` files. This keeps the Command Log less noisy. This option can be changed by overriding the default filtering in the {% url '`cy.server()` options' server#Options %}.
 
 Cypress automatically collects the request `headers` and the request `body` and will make this available to you.
 
@@ -285,6 +288,15 @@ In this example, there are many possible sources of failure. In most testing too
 
 With Cypress, by adding a {% url `cy.wait()` wait %}, you can more easily pinpoint your specific problem. If the response never came back, you'll receive an error like this:
 
+<!--
+To reproduce the following screenshot:
+it('test', () => {
+  cy.server()
+  cy.route('foo/bar').as('getSearch')
+  cy.wait('@getSearch')
+})
+-->
+
 {% imgTag /img/guides/clear-source-of-failure.png "Wait Failure" %}
 
 Now we know exactly why our test failed. It had nothing to do with the DOM. Instead we can see that either our request never went out or a request went out to the wrong URL.
@@ -336,7 +348,7 @@ cy.wait('@new-user')
 // we can grab the completed XHR object again to run more assertions
 // using cy.get(<alias>)
 cy.get('@new-user') // yields the same XHR object
-  .its('request.body')
+  .its('requestBody') // alternative: its('request.body')
   .should('deep.equal', {
     id: '101',
     firstName: 'Joe',
@@ -370,3 +382,4 @@ You can find more examples in our {% url "XHR Assertions" https://github.com/cyp
 # See also
 
 - {% url "Network requests in Kitchen Sink example" https://github.com/cypress-io/cypress-example-kitchensink/blob/master/cypress/integration/examples/network_requests.spec.js %}
+- {% url "See how to make a request with `cy.request()`" request %}

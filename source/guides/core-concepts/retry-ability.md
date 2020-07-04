@@ -17,7 +17,7 @@ A core feature of Cypress that assists with testing dynamic web applications is 
 There are two types of methods you can call in your Cypress tests: **commands** and **assertions**. For example, there are 6 commands and 2 assertions in the test below.
 
 ```javascript
-it('creates 2 items', function () {
+it('creates 2 items', () => {
   cy.visit('/')                       // command
   cy.focused()                        // command
     .should('have.class', 'new-todo') // assertion
@@ -159,7 +159,7 @@ Cypress will retry for up to 10 seconds to find a visible element of class `mobi
 Here is a short test that demonstrates some flake.
 
 ```javascript
-it('adds two items', function () {
+it('adds two items', () => {
   cy.visit('/')
 
   cy.get('.new-todo').type('todo A{enter}')
@@ -240,7 +240,7 @@ Luckily, once we understand how retry-ability works and how only the last comman
 The first solution we recommend is to avoid unnecessarily splitting commands that query elements. In our case we first query elements using `cy.get()` and then query from that list of elements using `.find()`. We can combine two separate queries into one - forcing the combined query to be retried.
 
 ```javascript
-it('adds two items', function () {
+it('adds two items', () => {
   cy.visit('/')
 
   cy.get('.new-todo').type('todo A{enter}')
@@ -281,7 +281,7 @@ See the {% url 'Set flag to start tests' https://glebbahmutov.com/blog/set-flag-
 There is another way to fix our flaky test. Whenever you write a longer test, we recommend alternating commands with assertions. In this case, I will add an assertion after the `cy.get()` command, but before the `.find()` command.
 
 ```javascript
-it('adds two items', function () {
+it('adds two items', () => {
   cy.visit('/')
 
   cy.get('.new-todo').type('todo A{enter}')
@@ -301,6 +301,135 @@ it('adds two items', function () {
 {% imgTag /img/guides/retry-ability/alternating.png "Passing test" %}
 
 The test passes, because the second `cy.get('.todo-list li')` is retried with its own assertion now `.should('have.length', 2)`. Only after successfully finding two `<li>` elements, the command `.find('label')` and its assertion starts, and by now, the item with the correct "todo B" label has been correctly queried.
+
+## Use `.should()` with a callback
+
+If you have to use commands that cannot be retried, but need to retry the entire chain, consider rewriting the commands into a single {% url '.should(callbackFn)' should#Function %} chained off the very first retry-able command.
+
+Below is an example where the number value is set after a delay:
+
+```html
+<div class="random-number-example">
+  Random number: <span id="random-number">🎁</span>
+</div>
+<script>
+  const el = document.getElementById('random-number')
+  setTimeout(() => {
+    el.innerText = Math.floor(Math.random() * 10 + 1)
+  }, 1500)
+</script>
+```
+
+{% imgTag /img/guides/retry-ability/random-number.gif "Random number" %}
+
+### {% fa fa-warning red %} Incorrectly waiting for values
+
+You may want to write a test like below, to test that the number is between 1 and 10, although **this will not work as intended**. The test yields the following values, noted in the comments, before failing.
+
+```javascript
+// WRONG: this test will not work as intended
+cy.get('#random-number') // <div>🎁</div>
+  .invoke('text')        // "🎁"
+  .then(parseFloat)      // NaN
+  .should('be.gte', 1)   // fails
+  .and('be.lte', 10)     // never evaluates
+```
+
+Unfortunately, the {% url '.then()' then %} command is not retried. Thus the test only runs the entire chain once before failing.
+
+{% imgTag /img/guides/retry-ability/random-number-first-attempt.png "First attempt at writing the test" width-600 %}
+
+### {% fa fa-check-circle green %} Correctly waiting for values
+
+We need to retry getting the element, invoking the `text()` method, calling the `parseFloat` function and running the `gte` and `lte` assertions. We can achieve this using the `.should(callbackFn)`.
+
+```javascript
+cy.get('#random-number')
+  .should(($div) => {
+    // all the code inside here will retry
+    // until it passes or times out
+    const n = parseFloat($div.text())
+
+    expect(n).to.be.gte(1).and.be.lte(10)
+  })
+```
+
+The above test retries getting the element and invoking the text of the element to get the number. When the number is finally set in the application, then the `gte` and `lte` assertions pass and the test passes.
+
+{% imgTag /img/guides/retry-ability/random-number-callback.gif "Random number using callback" %}
+
+## Use aliases
+
+When using {% url `cy.stub()` stub %} or {% url `cy.spy()` spy %} to test application's code, a good practice is to give it an alias and use the `cy.get('@alias').should('...')` assertion to retry.
+
+For example, when confirming that the button component invokes the `click` prop testing with the {% url "cypress-react-unit-test" https://github.com/bahmutov/cypress-react-unit-test %} plugin, the following test might or might not work:
+
+### {% fa fa-warning red %} Incorrectly checking if the stub was called
+
+```js
+const Clicker = ({ click }) => (
+  <div>
+    <button onClick={click}>Click me</button>
+  </div>
+)
+
+it('calls the click prop twice', () => {
+  const onClick = cy.stub()
+  // "mount" function comes from
+  // https://github.com/bahmutov/cypress-react-unit-test
+  mount(<Clicker click={onClick} />)
+  cy.get('button')
+    .click()
+    .click()
+    .then(() => {
+      // works in this case, but not recommended
+      // because .then() does not retry
+      expect(onClick).to.be.calledTwice
+    })
+})
+```
+
+The above example will fail if the component calls the `click` prop after a delay.
+
+```js
+const Clicker = ({ click }) => (
+  <div>
+    <button onClick={() => setTimeout(click, 500)}>Click me</button>
+  </div>
+)
+```
+
+{% imgTag /img/guides/retry-ability/delay-click.png "Expect fails the test without waiting for the delayed stub" width-600 %}
+
+The test finishes before the component calls the `click` prop twice, and without retrying the assertion `expect(onClick).to.be.calledTwice`.
+
+### {% fa fa-check-circle green %} Correctly waiting for the stub to be called
+
+We recommend aliasing the stub using the {% url `.as` as %} command and using `cy.get('@alias').should(...)` assertions.
+
+```js
+it('calls the click prop', () => {
+  const onClick = cy.stub().as('clicker')
+  // "mount" function comes from
+  // https://github.com/bahmutov/cypress-react-unit-test
+  mount(<Clicker click={onClick} />)
+  cy.get('button')
+    .click()
+    .click()
+
+  // good practice 💡
+  // auto-retry the stub until it was called twice
+  cy.get('@clicker').should('have.been.calledTwice')
+})
+```
+
+{% imgTag /img/guides/retry-ability/click-twice.gif "Retrying the assertions using a stub alias" %}
+
+Watch the short video below to see this example in action
+
+<!-- textlint-disable -->
+{% video youtube AlltFcsIFvc %}
+<!-- textlint-enable -->
 
 # See also
 

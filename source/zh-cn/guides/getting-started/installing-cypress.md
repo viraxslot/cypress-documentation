@@ -122,7 +122,7 @@ yarn run cypress open
 
 Cypress测试执行器会尝试在用户的机器上找到所有兼容的浏览器。你可以在程序的右上角下拉列表选择不同的浏览器。
 
-{% imgTag /img/guides/select-browser.png "Select a different browser" %}
+{% imgTag /img/guides/browser-list-dropdown.png "Select a different browser" %}
 
 阅读{% url "启动浏览器" launching-browsers %}，了解Cypress是如何在端对端测试中控制一个真实的浏览器。
 
@@ -200,7 +200,7 @@ CYPRESS_INSTALL_BINARY=0 npm install
 
 ## 二进制缓存
 
-从`3.0`版本开始, Cypress下载对应的Cypress二进制文件到全局系统缓存中, 以便二进制文件能够在多个项目件共享. 默认情况下, 全局缓存文件夹是:
+从`3.0`版本开始, Cypress下载对应的Cypress二进制文件到全局系统缓存中, 以便二进制文件能够在多个项目间共享. 默认情况下, 全局缓存文件夹是:
 
 - **MacOS**: `~/Library/Caches/Cypress`
 - **Linux**: `~/.cache/Cypress`

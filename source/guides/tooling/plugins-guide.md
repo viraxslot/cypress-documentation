@@ -38,7 +38,6 @@ The event `file:preprocessor` is used to customize how your test code is transpi
 
 You can use the `file:preprocessor` event to do things like:
 
-- Add TypeScript support.
 - Add the latest ES* support.
 - Write your test code in ClojureScript.
 - Customize the `babel` settings to add your own plugins.
@@ -79,13 +78,13 @@ You can use the `task` event to do things like:
 - Manipulating a database (seeding, reading, writing, etc.)
 - Storing state in Node that you want persisted (since the driver is fully refreshed on visits)
 - Performing parallel tasks (like making multiple http requests outside of Cypress)
-- Running an external process (like spinning up a Webdriver instance of another browser like Firefox, Safari, or puppeteer)
+- Running an external process (like spinning up a Webdriver instance of another browser like Safari or puppeteer)
 
 # List of plugins
 
-Cypress maintains an official list of plugins created by us and the community. You can `npm install` any of the plugins listed below:
+Cypress maintains a curated list of plugins created by us and the community. You can `npm install` any of the plugins listed below:
 
-{% url 'Our official list of Cypress plugins.' plugins %}
+{% url 'Our curated list of Cypress plugins.' plugins %}
 
 # Installing plugins
 

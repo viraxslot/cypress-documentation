@@ -39,6 +39,7 @@ sidebar:
     organizations: Organizations
     users: Users
     github-integration: GitHub Integration
+    slack-integration: Slack Integration
     analytics: 分析
     debugging: デバッグする
     variables-and-aliases: 変数と別名
@@ -51,20 +52,24 @@ sidebar:
     parallelization: Parallelization
     environment-variables: 環境変数
     launching-browsers: ブラウザーを起動する
+    cross-browser-testing: クロスブラウザテスト
     custom-commands: カスタムコマンド
     web-security: ウェブセキュリティー
     references: 参考
     configuration: 設定
+    experiments: Experiments
     proxy-configuration: Proxy Configuration
     error-messages: エラーメッセージ
     bundled-tools: バンドルツール
     assertions: アサーション
     best-practices: ベストプラクティス
     trade-offs: トレードオフ
+    troubleshooting: Troubleshooting
     changelog: 変更履歴
+    migration-guide: Migration Guide
     roadmap: ロードマップ
     tooling: ツール
-    intelligent-code-completion: コード自動補完
+    IDE-integration: IDE Integration
     plugins-guide: プラグイン
     reporters: レポーター
     typescript-support: TypeScript
@@ -172,9 +177,11 @@ sidebar:
     moment: moment
     blob: Blob
     promise: Promise
+    sinon: sinon
     cypress-api: Cypress API
     config: config
     env: env
+    isbrowser: isBrowser
     iscy: isCy
     custom-commands: Commands
     cookies: Cookies

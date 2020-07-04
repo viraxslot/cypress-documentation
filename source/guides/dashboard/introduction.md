@@ -3,6 +3,10 @@ title: Introduction
 ---
 The {% url 'Cypress Dashboard' https://on.cypress.io/dashboard %} is a service that gives you access to recorded tests - typically when running Cypress tests from your {% url 'CI provider' continuous-integration %}. The Dashboard provides you insight into what happened when your tests ran.
 
+<!-- textlint-disable -->
+{% video youtube ezp60FUnjGg %}
+<!-- textlint-enable -->
+
 # Features
 
 ## Organize projects
@@ -28,6 +32,13 @@ From the Dashboard you can:
 
 {% imgTag /img/dashboard/dashboard-runs-list.png "Dashboard Screenshot" %}
 
+## Manage runs
+
+From the Dashboard you can:
+
+- {% url "Cancel runs" runs#Cancel-run %} currently in progress
+- {% url "Archive runs" runs#Archive-run %} in a canceled or errored state
+
 ## Manage organizations
 
 From the Dashboard you can:
@@ -49,6 +60,12 @@ From the Dashboard you can:
 
 - Integrate your Cypress tests with your GitHub workflow via commit {% url 'status checks' github-integration#Status-checks %}
 - Integrate Cypress into GitHub via {% url 'pull requests' github-integration#Pull-request-comments %}
+
+## Integrate with Slack
+
+From the Dashboard you can:
+
+- Integrate Cypress into Slack on every recorded test run.
 
 ### See tests runs in the Test Runner
 
