@@ -4,17 +4,17 @@ title: Using Cypress
 containerClass: faq
 ---
 
-## {% fa fa-angle-right %} How do I get an element's text contents?
+## {% fa fa-angle-right %} Как я могу получить текст элемента?
 
-Cypress commands yield jQuery objects, so you can call methods on them.
+Команды Cypress возвращают объекты jQuery, поэтому вы можете вызывать их методы.
 
-If you're trying to assert on an element's text content:
+Если вы пытаетесь проверить текстовое содержимое элемента:
 
 ```javascript
 cy.get('div').should('have.text', 'foobarbaz')
 ```
 
-If you'd like to work with the text prior to an assertion:
+Если вы хотите получить текст перед выполнением проверки:
 
 ```javascript
 cy.get('div').should(($div) => {
@@ -26,52 +26,52 @@ cy.get('div').should(($div) => {
 })
 ```
 
-If you need to convert text to a number before checking if it is greater than 10:
+Если вам необходимо преобразовать текст в число перед тем, как проверить, что он больше 10:
 
 ```javascript
 cy.get('div').invoke('text').then(parseFloat).should('be.gt', 10)
 ```
 
-If you need to hold a reference or compare values of text:
+Если вам необходимо сравнить текст до и после:
 
 ```javascript
 cy.get('div').invoke('text').then((text1) => {
-  // do more work here
+  // дополнительные действия
 
-  // click the button which changes the div's text
+  // нажимаем кнопку, которая изменяет текст в div-е
   cy.get('button').click()
 
-  // grab the div again and compare its previous text
-  // to the current text
+  // снова берём текст из div и сравниваем предыдущее значение
+  // с текущим
   cy.get('div').invoke('text').should((text2) => {
     expect(text1).not.to.eq(text2)
   })
 })
 ```
 
-jQuery's `.text()` method automatically calls `elem.textContent` under the hood. If you'd like to instead use `innerText` you can do the following:
+Метод jQuery `.text()` автоматически вызывает `elem.textContent` под капотом. Если вы хотите вместо этого использовать `innerText`, то вы можете сделать следующее:
 
 ```javascript
 cy.get('div').should(($div) => {
-  // access the native DOM element
+  // доступ к нативному DOM-элементу
   expect($div.get(0).innerText).to.eq('foobarbaz')
 })
 ```
 
-This is the equivalent of Selenium's `getText()` method, which returns the innerText of a visible element.
+Это эквивалент методу Selenium-а `getText()`, который возвращает внутренний текст видимого элемента.
 
-## {% fa fa-angle-right %} How do I get an input's value?
+## {% fa fa-angle-right %} Как я могу получить значение поля ввода?
 
-Cypress yields you jQuery objects, so you can call methods on them.
+Команды Cypress возвращают объекты jQuery, поэтому вы можете вызывать их методы.
 
-If you're trying to assert on an input's value:
+Если вы пытаетесь проверить значение поля ввода:
 
 ```javascript
-// make an assertion on the value
+// сделайте проверку на значение
 cy.get('input').should('have.value', 'abc')
 ```
 
-If you'd like to massage or work with the text prior to an assertion:
+Если вы хотите модифицировать текст перед тем, как сделать проверку:
 
 ```javascript
 cy.get('input').should(($input) => {
@@ -83,37 +83,37 @@ cy.get('input').should(($input) => {
 })
 ```
 
-If you need to hold a reference or compare values of text:
+Если вам необходимо сравнить текст до и после:
 
 ```javascript
 cy.get('input').invoke('val').then((val1) => {
-  // do more work here
+  // дополнительные действия
 
-  // click the button which changes the input's value
+  // нажимаем кнопку, которая изменяет текст в поле ввода
   cy.get('button').click()
 
-  // grab the input again and compare its previous value
-  // to the current value
+  // снова берём текст из поля ввода и сравниваем предыдущее значение
+  // с текущим
   cy.get('input').invoke('val').should((val2) => {
     expect(val1).not.to.eq(val2)
   })
 })
 ```
 
-## {% fa fa-angle-right %} How do I compare the value or state of one thing to another?
+## {% fa fa-angle-right %} Как я могу проверить значение или состояние одного элемента по отношению к другому?
 
-Our {% url 'Variables and Aliases guide' variables-and-aliases %} gives you examples of doing exactly that.
+Наше {% url 'руководство по переменным и алиасам' variables-and-aliases %} содержит примеры как сделать именно это.
 
-## {% fa fa-angle-right %} Can I store an attribute's value in a constant or a variable for later use?
+## {% fa fa-angle-right %} Могу ли я сохранить значение атрибута в константу или переменную для последующего использования?
 
-Yes, and there are a couple of ways to do this. One way to hold a value or reference is with {% url '`closures`' variables-and-aliases#Closures %}.
-Commonly, users believe they have a need to store a value in a `const`, `var`, or `let`. Cypress recommends doing this only when dealing with mutable objects (that change state).
+Да, и есть несколько способов это сделать. Первый способ - хранить значение или ссылку при помощи {% url '`замыканий`' variables-and-aliases#Closures %}.
+В целом пользователи считают, что необходимо хранить значение в `const`, `var` или `let`. Cypress рекомендует делать это только с мутабельными объектами (которые изменяют состояние).
 
-For examples how to do this, please read our {% url 'Variables and Aliases guide' variables-and-aliases %}.
+За примером обратитесь, пожалуйста, к нашему {% url 'гайду о переменных и алиасах' variables-and-aliases %}.
 
-## {% fa fa-angle-right %} How do I get the native DOM reference of an element found using Cypress?
+## {% fa fa-angle-right %} Как я могу получить нативную DOM-ссылку на элемент, который я нашёл при помощи Cypress?
 
-Cypress wraps elements in jQuery so you'd get the native element from there within a {% url "`.then()`" then %} command.
+Cypress делает обёртку для элементов jQuery, поэтому получить нативный элемент из обёртки вы можете при помощи команды {% url "`.then()`" then %}.
 
 ```javascript
 cy.get('button').then(($el) => {
@@ -121,48 +121,48 @@ cy.get('button').then(($el) => {
 })
 ```
 
-## {% fa fa-angle-right %} How do I do something different if an element doesn't exist?
+## {% fa fa-angle-right %} Как мне обработать ситуацию, когда элемент не существует?
 
-What you're asking about is conditional testing and control flow.
+То, о чём вы спрашиваете, называется conditional testing (тестирование по условию) и control flow (порядок исполнения).
 
-Please read our extensive {% url 'Conditional Testing Guide' conditional-testing %} which explains this in detail.
+Пожалуйста, прочтите наше обширное {% url 'руководство по тестированию по условию' conditional-testing %}, в котором объяснены все детали.
 
-## {% fa fa-angle-right %} How can I make Cypress wait until something is visible in the DOM?
+## {% fa fa-angle-right %} Как сделать в Cypress ожидание появления элементов в DOM?
 
-{% note info Remember %}
-DOM based commands will automatically {% url "retry" retry-ability %} and wait for their corresponding elements to exist before failing.
+{% note info Важно помнить %}
+Команды, которые ищут что-то в DOM, будут автоматически {% url "повторяться" retry-ability %} и перед тем как упасть будут ожидать появления искомых элементов.
 {% endnote %}
 
-Cypress offers you many robust ways to {% url 'query the DOM' introduction-to-cypress#Querying-Elements %}, all wrapped with retry-and-timeout logic.
+Cypress предлагает множество надёжных способов {% url 'запросить что-то в DOM' introduction-to-cypress#Querying-Elements %} и все они обёрнуты в логику повтор-и-ожидание.
 
-Other ways to wait for an element's presence in the DOM is through `timeouts`. Cypress commands have a default timeout of 4 seconds, however, most Cypress commands have {% url 'customizable timeout options' configuration#Timeouts %}. Timeouts can be configured globally or on a per-command basis.
+Другой способ дождаться появления элемента в DOM - это `таймауты`. Команды Cypress по умолчанию будут ждать 4 секунды, однако, большинство команд Cypress имеют {% url 'опции задания таймаутов' configuration#Timeouts %}. Таймауты также могут быть сконфигурированы глобально или через командную строку.
 
-In {% url 'some cases' interacting-with-elements#Visibility %}, your DOM element will not be actionable. Cypress gives you a powerful {%url '`{force:true}`' interacting-with-elements#Forcing %} option you can pass to most action commands.
+В {% url 'некоторых случаях' interacting-with-elements#Visibility %}, к вашему DOM-элементу нельзя будет обратиться. Cypress даёт вам мощную опцию {%url '`{force:true}`' interacting-with-elements#Forcing %}, которую вы можете передать в большинство команд.
 
-**Please read** our {% url 'Core Concepts Introduction to Cypress' introduction-to-cypress %}. This is the single most important guide for understanding how to test with Cypress.
+**Пожалуйста, прочтите** наше {% url 'введение в ключевые концепции Cypress' introduction-to-cypress %}. Это исчерпывающее руководство поможет вам понять как тестировать в Cypress.
 
-## {% fa fa-angle-right %} How do I wait for my application to load?
+## {% fa fa-angle-right %} Как мне сделать ожидание загрузки приложения?
 
-We have seen many different iterations of this question. The answers can be varied depending on how your application behaves and the circumstances under which you are testing it. Here are a few of the most common versions of this question.
+Нам много раз задавали этот вопрос. Ответы могут быть разными в зависимости от того, как ваше приложение ведёт себя и в каких условиях вы тестируете. Вот примеры наиболее часто встречающихся вариантов этого вопроса.
 
-**_How do I know if my page is done loading?_**
+**_Как мне узнать, что моя страница загрузилась?_**
 
-When you load your application using `cy.visit()`, Cypress will wait for the `load` event to fire. The {% url '`cy.visit()`' visit#Usage %} command loads a remote page and does not resolve until all of the external resources complete their loading phase. Because we expect your applications to observe differing load times, this command's default timeout is set to 60000ms. If you visit an invalid url or a {% url 'second unique domain' web-security#Same-superdomain-per-test %}, Cypress will log a verbose yet friendly error message.
+Когда вы загружаете ваше приложение при помощи `cy.visit()`, Cypress будет ждать наступления события `load`. Команда {% url '`cy.visit()`' visit#Usage %} загружает удалённую страницу и не прекращает выполнение до тех пор, пока все внешние ресурсы не будут загружены. Так как мы ожидаем, что ваши приложения могут иметь разную скорость загрузки, по умолчанию эта команда ожидает 60000мс. Если вы перейдёте по некорректному url или на {% url 'второй уникальный домен' web-security#Same-superdomain-per-test %}, Cypress залогирует длинное, но зато понятное сообщение об ошибке.
 
-**_In CI, how do I make sure my server has started?_**
+**_Если я использую CI, как мне убедиться, что мой сервер стартовал?_**
 
-We recommend these great modules for this use case:
+Мы рекомендуем эти отличные модули для этого случая:
 
 * {% url '`wait-on`' https://www.npmjs.com/package/wait-on %}
 * {% url '`start-server-and-test`' https://github.com/bahmutov/start-server-and-test %}
 
-**_How can I wait for my requests to be complete?_**
+**_Как мне дождаться исполнения запросов?_**
 
-The prescribed way to do this is to use {% url '`cy.server()`' server#Syntax %}, define your routes using {% url '`cy.route()`' route#Syntax %}, create {% url '`aliases`' variables-and-aliases#Aliases %} for these routes prior to the visit, and _then_ you can explicitly tell Cypress which routes you want to wait on using {% url '`cy.wait()`' wait#Syntax %}. **There is no magical way to wait for all of your XHRs or Ajax requests.** Because of the asynchronous nature of these requests, Cypress cannot intuitively know to wait for them. You must define these routes and be able to unambiguously tell Cypress which requests you want to wait on.
+Вам, определённо, нужно использовать команду {% url '`cy.server()`' server#Syntax %}, определить пути при помощи {% url '`cy.route()`' route#Syntax %}, создать {% url '`алиасы`' variables-and-aliases#Aliases %} для этих путей перед тем, как переходить по ним, и _тогда_ вы сможете явно указать Cypress при помощи {% url '`cy.wait()`' wait#Syntax %} выполнения каких операций вы хотите дождаться. **Нет никакого магического способа дождаться всех ваших XHRs или Ajax запросов.** Из-за асинхронной природы этих запросов Cypress не может интуитивно понять, как их дождаться. Вы должны определить пути и однозначно сказать Cypress каких запросов вы хотите дождаться.
 
-## {% fa fa-angle-right %} Can I test the HTML `<head>` element?
+## {% fa fa-angle-right %} Могу ли я проверить HTML-элемент `<head>`?
 
-Yes, you sure can. While executing tests in the Test Runner, you can view the entire `window.document` object in your open console using {% url '`cy.document()`' document %}. You can even make assertions on the `<head>` element. Check out this example.
+Да, конечно, можете. В процессе выполнения тестов в Test Runner, вы можете просматривать объект `window.document` в открытой консоли используя {% url '`cy.document()`' document %}. Также вы можете сделать проверку элемента `<head>`. Обратите внимание на пример.
 
 ```html
 <!DOCTYPE html>
@@ -170,8 +170,8 @@ Yes, you sure can. While executing tests in the Test Runner, you can view the en
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-  <meta name="description" content="This description is so meta">
-  <title>Test the HEAD content</title>
+  <meta name="description" content="Такое метовое описание">
+  <title>Проверка содержимого HEAD</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -180,65 +180,65 @@ Yes, you sure can. While executing tests in the Test Runner, you can view the en
 ```
 
 ```js
-describe('The Document Metadata', () => {
+describe('Мета-информация вашего документа', () => {
   beforeEach(() => {
     cy.visit('/')
   })
 
-  it('looks inside the head content using `cy.document()`', () => {
-    // this will yield the entire window.document object
-    // if you click on DOCUMENT from the command log,
-    // it will output the entire #document to the console
+  it('смотрим внутрь тега head, используя `cy.document()`', () => {
+    // эта команда вернёт целиком объект window.document
+    // если вы нажмёте на  DOCUMENT в логе команд,
+    // то это выведет #document целиком в консоль
     cy.document()
   })
 
-  // or make assertions on any of the metadata in the head element
+  // или сделайте проверку любой мета-информации в элементе head
 
-  it('looks inside <title> tag', () => {
+  it('смотрим внутрь тега <title>', () => {
     cy.get('head title')
-      .should('contain', 'Test the HEAD content')
+      .should('contain', 'Проверка содержимого HEAD')
   })
 
-  it('looks inside <meta> tag for description', () => {
+  it('смотрим внутрь тега <meta> и ищем описание', () => {
     cy.get('head meta[name="description"]')
-      .should('have.attr', 'content', 'This description is so meta')
+      .should('have.attr', 'content', 'Такое метовое описание')
   })
 })
 ```
 
-## {% fa fa-angle-right %} Can I check that a form's HTML form validation is shown when an input is invalid?
+## {% fa fa-angle-right %} Могу ли я проверить, что валидационное сообщение на HTML-форме показывается, когда ввод невалидный?
 
-You certainly can.
+Конечно, можете.
 
 ```javascript
-it('check validation message on invalid input', () => {
+it('проверка валидационного сообщения для некорректного ввода', () => {
   cy.get('input:invalid').should('have.length', 0)
   cy.get('[type="email"]').type('not_an_email')
   cy.get('[type="submit"]').click()
   cy.get('input:invalid').should('have.length', 1)
   cy.get('[type="email"]').then(($input) => {
-    expect($input[0].validationMessage).to.eq('I expect an email!')
+    expect($input[0].validationMessage).to.eq('А я, вообще-то, ожидал email!')
   })
 })
 ```
 
 
-## {% fa fa-angle-right %} Can I throttle network speeds using Cypress?
+## {% fa fa-angle-right %} Могу ли я замедлить скорость сети при помощи Cypress?
 
-You can throttle your network connection by accessing your Developer Tools Network panel. Additionally, you can add your own custom presets by selecting **Custom > Add** from the Network Conditions drawer.
+Вы можете замедлить скорость сети в панели Developer Tools, вкладка Network. В дополнение, вы можете добавить свои собственные настройки, выбрав **Custom > Add** в выпадающем меню на вкладке Network.
 
-We do not currently offer any options to simulate this during `cypress run`.
+На данный момент мы не предлагаем способа эмулировать такое поведение в процессе `cypress run`.
 
-## {% fa fa-angle-right %} Can I use the new ES7 async / await syntax?
+## {% fa fa-angle-right %} Могу ли я использовать новый ES7 async / await синтаксис?
 
-No. The Command API is not designed in a way that makes this possible. This is not a limitation of Cypress - it is a very conscious and important design decision.
+Нет. Наше API разрабатывалось без учёта, что это возможно. Это не ограничение Cypress - это вполне осознанное и важное проектное решение.
 
-Async / await is sugar around promises and Cypress commands are a mixture of both promises and streams.
+Async / await - это синтаксический сахар вокруг промисов, а команды Cypress - это сочетание промисов и стримов.
 
-If you're curious please read:
+Если вы заинтересовались, пожалуйста, прочтите:
 
-- Our {% url 'Introduction to Cypress guide' introduction-to-cypress#Commands-Are-Asynchronous %} which explains how the Commands are designed
-- Our {% url 'Variables and Aliases guide' variables-and-aliases %} which talks about patterns dealing with async code
+- Наше {% url 'вводное руководство по Cypress' introduction-to-cypress#Commands-Are-Asynchronous %}, которое объясняет, как работаю Команды API
+- Наше {% url 'руководство по переменным и алиасам' variables-and-aliases %}, которое рассказывает о паттернах работы с асинхронным кодом
 
 ## {% fa fa-angle-right %} How do I select or query for elements if my application uses dynamic classes or dynamic IDs?
 

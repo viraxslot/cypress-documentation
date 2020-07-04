@@ -39,7 +39,7 @@ sidebar:
     organizations: Организации
     users: Пользователи
     github-integration: Интеграция с GitHub
-    slack-integration: Slack Integration
+    slack-integration: Интеграция со Slack
     analytics: Аналитика
     debugging: Отладка
     variables-and-aliases: Переменные и Алиасы
@@ -52,7 +52,7 @@ sidebar:
     parallelization: Параллелизация
     environment-variables: Переменные среды
     launching-browsers: Запуск браузеров
-    cross-browser-testing: Cross Browser Testing
+    cross-browser-testing: Кросс-браузерное тестирование
     custom-commands: Пользовательские команды
     web-security: Web-безопасность
     references: Ссылки
@@ -64,12 +64,12 @@ sidebar:
     assertions: Ассерты
     best-practices: Лучшие практики
     trade-offs: Компромиссы
-    troubleshooting: Troubleshooting
+    troubleshooting: Решение проблем
     changelog: Изменения в продукте
-    migration-guide: Migration Guide
+    migration-guide: Руководство по миграции
     roadmap: Карта проекта
     tooling: Утилиты
-    IDE-integration: IDE Integration
+    IDE-integration: Интеграция с IDE
     plugins-guide: Плагины
     reporters: Репортеры
     typescript-support: TypeScript
